@@ -144,10 +144,10 @@ abstract contract Ownable is Context {
 }
 
 
-contract LooksRareToken is Context,IERC20, Ownable{
+contract SCARDust is Context,IERC20, Ownable{
     using Address for address;
-    string private _name = "LooksRareToken";
-    string private _symbol = "LooksRare";
+    string private _name = "SCARDust";
+    string private _symbol = "SCRD";
     uint8 private _decimals = 18;
     uint256 totalFeeFortx = 0;
     uint256 maxWalletTreshold = 5;
@@ -464,7 +464,7 @@ contract LooksRareToken is Context,IERC20, Ownable{
                 }
                 //Buy Fees
                 else if(automatedMarketMakerPairs[from] && from != address(_router)) {
-                    if(block.number - _liqAddBlock < snipeBlockAmt){
+                    if(block.number - _liqAddBlock<snipeBlockAmt){
                         botWallets[to] = true;
                         snipersCaught++;
                     }

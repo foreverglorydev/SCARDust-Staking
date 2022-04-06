@@ -14,8 +14,8 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const _looksRareToken = "0xaB047Bbc2Ae6D98A89179188C7B3eD0585Bf7D0F";
-  const _tokenSplitter = "0x1dCD94a18376E34455274ed7069A6E3870fFd8E2";
+  const _looksRareToken = "0x3fE0fa80e5243Bc34773A633F1164466652884A5";
+  const _tokenSplitter = "0x515b9bcA845eC79a2202ed945b171Eedf2e5A976";
   const _startBlock = "10429000"; // Testnet BlockNumer
   const _rewardsPerBlockForStaking = ["189000000000000000000","89775000000000000000","35437500000000000000","18900000000000000000"]
   const _rewardsPerBlockForOthers = ["611000000000000000000", "290225000000000000000", "114562500000000000000", "61100000000000000000"];

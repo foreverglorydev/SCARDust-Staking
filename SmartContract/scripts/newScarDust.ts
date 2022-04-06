@@ -14,18 +14,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const _feeSharingSystem = "0x74a027a27ae127c4953Af175Daa625C4DF50E6f9";
-  const _uniswapRouter = "0xe592427a0aece92de3edee1f18e0157c05861564";
+  const SCARDust = await ethers.getContractFactory("SCARDust");
+  const scardust = await SCARDust.deploy(1000);
 
-  const AggregatorFeeSharingWithUniswapV3 = await ethers.getContractFactory("AggregatorFeeSharingWithUniswapV3");
-  const aggregatorFeeSharingWithUniswapV3 = await AggregatorFeeSharingWithUniswapV3.deploy(
-    _feeSharingSystem,
-    _uniswapRouter,
-  );
+  await scardust.deployed();
 
-  await aggregatorFeeSharingWithUniswapV3.deployed();
-
-  console.log("AggregatorFeeSharingWithUniswapV3 deployed to:", aggregatorFeeSharingWithUniswapV3.address);
+  console.log("SCARDust deployed to:", scardust.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
