@@ -19,11 +19,11 @@ async function main() {
   const trading = "0x821965C1fD8B60D4B33E23C5832E2A7662faAADC";
   const _accounts = [team, treasury, trading]
   const _shares = [4410, 800, 900];
-  const _looksRareToken = "0x3fE0fa80e5243Bc34773A633F1164466652884A5";
+  const _scarDustToken = "0x4FCb12e1Ba93d1c77Bdc872212CaAf53e2e739E7";
 
 
   const TokenSplitter = await ethers.getContractFactory("TokenSplitter");
-  const tokenSplitter = await TokenSplitter.deploy(_accounts, _shares, _looksRareToken);
+  const tokenSplitter = await TokenSplitter.deploy(_accounts, _shares, _scarDustToken);
 
   await tokenSplitter.deployed();
 

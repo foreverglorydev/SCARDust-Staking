@@ -19,7 +19,7 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
 
     uint256 public immutable TOTAL_SHARES;
 
-    IERC20 public immutable looksRareToken;
+    IERC20 public immutable ScarDustToken;
 
     // Total LOOKS tokens distributed across all accounts
     uint256 public totalTokensDistributed;
@@ -33,12 +33,12 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
      * @notice Constructor
      * @param _accounts array of accounts addresses
      * @param _shares array of shares per account
-     * @param _looksRareToken address of the LOOKS token
+     * @param _ScarDustToken address of the LOOKS token
      */
     constructor(
         address[] memory _accounts,
         uint256[] memory _shares,
-        address _looksRareToken
+        address _ScarDustToken
     ) {
         require(_accounts.length == _shares.length, "Splitter: Length differ");
         require(_accounts.length > 0, "Splitter: Length must be > 0");
@@ -53,7 +53,7 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
         }
 
         TOTAL_SHARES = currentShares;
-        looksRareToken = IERC20(_looksRareToken);
+        ScarDustToken = IERC20(_ScarDustToken);
     }
 
     /**
@@ -64,7 +64,7 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
         require(accountInfo[account].shares > 0, "Splitter: Account has no share");
 
         // Calculate amount to transfer to the account
-        uint256 totalTokensReceived = looksRareToken.balanceOf(address(this)) + totalTokensDistributed;
+        uint256 totalTokensReceived = ScarDustToken.balanceOf(address(this)) + totalTokensDistributed;
         uint256 pendingRewards = ((totalTokensReceived * accountInfo[account].shares) / TOTAL_SHARES) -
             accountInfo[account].tokensDistributedToAccount;
 
@@ -75,7 +75,7 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
         totalTokensDistributed += pendingRewards;
 
         // Transfer funds to account
-        looksRareToken.safeTransfer(account, pendingRewards);
+        ScarDustToken.safeTransfer(account, pendingRewards);
 
         emit TokensTransferred(account, pendingRewards);
     }
@@ -110,7 +110,7 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
             return 0;
         }
 
-        uint256 totalTokensReceived = looksRareToken.balanceOf(address(this)) + totalTokensDistributed;
+        uint256 totalTokensReceived = ScarDustToken.balanceOf(address(this)) + totalTokensDistributed;
         uint256 pendingRewards = ((totalTokensReceived * accountInfo[account].shares) / TOTAL_SHARES) -
             accountInfo[account].tokensDistributedToAccount;
 

@@ -38,10 +38,10 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       gas: 2100000,
-      gasPrice: 8000000000
+      gasPrice: 8000000000,
     },
     rinkeby: {
-      url: process.env.RINKEBY_URL || "",
+      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },

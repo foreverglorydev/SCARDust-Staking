@@ -18,12 +18,12 @@
 //   const _premintAmount = "200000000000000000000000000";
 //   const _cap = "1000000000000000000000000000";
 
-//   const LooksRareToken = await ethers.getContractFactory("LooksRareToken");
-//   const looksRareToken = await LooksRareToken.deploy(_premintReceiver, _premintAmount, _cap);
+//   const ScarDustToken = await ethers.getContractFactory("ScarDustToken");
+//   const scarDustToken = await ScarDustToken.deploy(_premintReceiver, _premintAmount, _cap);
 
-//   await looksRareToken.deployed();
+//   await scarDustToken.deployed();
 
-//   console.log("LooksRareToken deployed to:", looksRareToken.address);
+//   console.log("ScarDustToken deployed to:", scarDustToken.address);
 // }
 
 // // We recommend this pattern to be able to use async/await everywhere
@@ -49,12 +49,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const LooksRareToken = await ethers.getContractFactory("LooksRareToken");
-  const looksRareToken = await LooksRareToken.deploy(200000);
+  const ScarDustToken = await ethers.getContractFactory("ScarDustToken");
+  const scarDustToken = await ScarDustToken.deploy(200000);
 
-  await looksRareToken.deployed();
+  await scarDustToken.deployed();
 
-  console.log("SCARDust deployed to:", looksRareToken.address);
+  console.log("SCARDust deployed to:", scarDustToken.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

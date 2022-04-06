@@ -4,16 +4,16 @@ pragma solidity ^0.8.0;
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {ILooksRareToken} from "../interfaces/ILooksRareToken.sol";
+import {IScarDustToken} from "../interfaces/IScarDustToken.sol";
 
 /**
  * @title TokenDistributor
- * @notice It handles the distribution of LOOKS token.
+ * @notice It handles the distribution of DUST token.
  * It auto-adjusts block rewards over a set number of periods.
  */
 contract TokenDistributor is ReentrancyGuard {
     using SafeERC20 for IERC20;
-    using SafeERC20 for ILooksRareToken;
+    using SafeERC20 for IScarDustToken;
 
     struct StakingPeriod {
         uint256 rewardPerBlockForStaking;
@@ -29,7 +29,7 @@ contract TokenDistributor is ReentrancyGuard {
     // Precision factor for calculating rewards
     uint256 public constant PRECISION_FACTOR = 10**12;
 
-    ILooksRareToken public immutable looksRareToken;
+    IScarDustToken public immutable ScarDustToken;
 
     address public immutable tokenSplitter;
 
@@ -76,7 +76,7 @@ contract TokenDistributor is ReentrancyGuard {
 
     /**
      * @notice Constructor
-     * @param _looksRareToken LOOKS token address
+     * @param _ScarDustToken DUST token address
      * @param _tokenSplitter token splitter contract address (for team and trading rewards)
      * @param _startBlock start block for reward program
      * @param _rewardsPerBlockForStaking array of rewards per block for staking
@@ -85,7 +85,7 @@ contract TokenDistributor is ReentrancyGuard {
      * @param _numberPeriods number of periods with different rewards/lengthes (e.g., if 3 changes --> 4 periods)
      */
     constructor(
-        address _looksRareToken,
+        address _ScarDustToken,
         address _tokenSplitter,
         uint256 _startBlock,
         uint256[] memory _rewardsPerBlockForStaking,
@@ -101,8 +101,8 @@ contract TokenDistributor is ReentrancyGuard {
         );
 
         // 1. Operational checks for supply
-        uint256 nonCirculatingSupply = ILooksRareToken(_looksRareToken).SUPPLY_CAP() -
-            ILooksRareToken(_looksRareToken).totalSupply();
+        uint256 nonCirculatingSupply = IScarDustToken(_ScarDustToken).SUPPLY_CAP() -
+            IScarDustToken(_ScarDustToken).totalSupply();
 
         uint256 amountTokensToBeMinted;
 
@@ -121,7 +121,7 @@ contract TokenDistributor is ReentrancyGuard {
         require(amountTokensToBeMinted == nonCirculatingSupply, "Distributor: Wrong reward parameters");
 
         // 2. Store values
-        looksRareToken = ILooksRareToken(_looksRareToken);
+        ScarDustToken = IScarDustToken(_ScarDustToken);
         tokenSplitter = _tokenSplitter;
         rewardPerBlockForStaking = _rewardsPerBlockForStaking[0];
         rewardPerBlockForOthers = _rewardsPerBlockForOthers[0];
@@ -137,7 +137,7 @@ contract TokenDistributor is ReentrancyGuard {
 
     /**
      * @notice Deposit staked tokens and compounds pending rewards
-     * @param amount amount to deposit (in LOOKS)
+     * @param amount amount to deposit (in DUST)
      */
     function deposit(uint256 amount) external nonReentrant {
         require(amount > 0, "Deposit: Amount must be > 0");
@@ -145,8 +145,8 @@ contract TokenDistributor is ReentrancyGuard {
         // Update pool information
         _updatePool();
 
-        // Transfer LOOKS tokens to this contract
-        looksRareToken.safeTransferFrom(msg.sender, address(this), amount);
+        // Transfer DUST tokens to this contract
+        ScarDustToken.safeTransferFrom(msg.sender, address(this), amount);
 
         uint256 pendingRewards;
 
@@ -227,8 +227,8 @@ contract TokenDistributor is ReentrancyGuard {
         // Adjust total amount staked
         totalAmountStaked = totalAmountStaked + pendingRewards - amount;
 
-        // Transfer LOOKS tokens to the sender
-        looksRareToken.safeTransfer(msg.sender, amount);
+        // Transfer DUST tokens to the sender
+        ScarDustToken.safeTransfer(msg.sender, amount);
 
         emit Withdraw(msg.sender, amount, pendingRewards);
     }
@@ -255,8 +255,8 @@ contract TokenDistributor is ReentrancyGuard {
         userInfo[msg.sender].amount = 0;
         userInfo[msg.sender].rewardDebt = 0;
 
-        // Transfer LOOKS tokens to the sender
-        looksRareToken.safeTransfer(msg.sender, amountToTransfer);
+        // Transfer DUST tokens to the sender
+        ScarDustToken.safeTransfer(msg.sender, amountToTransfer);
 
         emit Withdraw(msg.sender, amountToTransfer, pendingRewards);
     }
@@ -349,12 +349,12 @@ contract TokenDistributor is ReentrancyGuard {
         // Mint tokens only if token rewards for staking are not null
         if (tokenRewardForStaking > 0) {
             // It allows protection against potential issues to prevent funds from being locked
-            bool mintStatus = looksRareToken.mint(address(this), tokenRewardForStaking);
+            bool mintStatus = ScarDustToken.mint(address(this), tokenRewardForStaking);
             if (mintStatus) {
                 accTokenPerShare = accTokenPerShare + ((tokenRewardForStaking * PRECISION_FACTOR) / totalAmountStaked);
             }
 
-            looksRareToken.mint(tokenSplitter, tokenRewardForOthers);
+            ScarDustToken.mint(tokenSplitter, tokenRewardForOthers);
         }
 
         // Update last reward block only if it wasn't updated after or at the end block

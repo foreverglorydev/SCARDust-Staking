@@ -144,10 +144,10 @@ abstract contract Ownable is Context {
 }
 
 
-contract LooksRareToken is Context,IERC20, Ownable{
+contract ScarDustToken is Context,IERC20, Ownable{
     using Address for address;
-    string private _name = "LooksRareToken";
-    string private _symbol = "LooksRare";
+    string private _name = "ScarDustToken";
+    string private _symbol = "ScarDust";
     uint8 private _decimals = 18;
     uint256 totalFeeFortx = 0;
     uint256 maxWalletTreshold = 5;

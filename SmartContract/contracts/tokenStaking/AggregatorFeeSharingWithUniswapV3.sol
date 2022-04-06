@@ -30,7 +30,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
     uint256 public immutable MINIMUM_DEPOSIT_LOOKS;
 
     // LooksRare Token (LOOKS)
-    IERC20 public immutable looksRareToken;
+    IERC20 public immutable ScarDustToken;
 
     // Reward token (WETH)
     IERC20 public immutable rewardToken;
@@ -76,16 +76,16 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
      * @param _uniswapRouter address of the Uniswap v3 router
      */
     constructor(address _feeSharingSystem, address _uniswapRouter) {
-        address looksRareTokenAddress = address(FeeSharingSystem(_feeSharingSystem).looksRareToken());
+        address ScarDustTokenAddress = address(FeeSharingSystem(_feeSharingSystem).ScarDustToken());
         address rewardTokenAddress = address(FeeSharingSystem(_feeSharingSystem).rewardToken());
 
-        looksRareToken = IERC20(looksRareTokenAddress);
+        ScarDustToken = IERC20(ScarDustTokenAddress);
         rewardToken = IERC20(rewardTokenAddress);
 
         feeSharingSystem = FeeSharingSystem(_feeSharingSystem);
         uniswapRouter = ISwapRouter(_uniswapRouter);
 
-        IERC20(looksRareTokenAddress).approve(_feeSharingSystem, type(uint256).max);
+        IERC20(ScarDustTokenAddress).approve(_feeSharingSystem, type(uint256).max);
         IERC20(rewardTokenAddress).approve(_uniswapRouter, type(uint256).max);
 
         tradingFeeUniswapV3 = 3000;
@@ -105,7 +105,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
         }
 
         // Transfer LOOKS tokens to this address
-        looksRareToken.safeTransferFrom(msg.sender, address(this), amount);
+        ScarDustToken.safeTransferFrom(msg.sender, address(this), amount);
 
         // Fetch the total number of LOOKS staked by this contract
         uint256 totalAmountStaked = feeSharingSystem.calculateSharesValueInLOOKS(address(this));
@@ -161,7 +161,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
      * @dev Only callable by owner.
      */
     function checkAndAdjustLOOKSTokenAllowanceIfRequired() external onlyOwner {
-        looksRareToken.approve(address(feeSharingSystem), type(uint256).max);
+        ScarDustToken.approve(address(feeSharingSystem), type(uint256).max);
     }
 
     /**
@@ -308,7 +308,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
             bool isExecuted = _sellRewardTokenToLOOKS(amountToSell);
 
             if (isExecuted) {
-                uint256 adjustedAmount = looksRareToken.balanceOf(address(this));
+                uint256 adjustedAmount = ScarDustToken.balanceOf(address(this));
 
                 if (adjustedAmount >= MINIMUM_DEPOSIT_LOOKS) {
                     feeSharingSystem.deposit(adjustedAmount, false);
@@ -331,7 +331,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
         // Set the order parameters
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams(
             address(rewardToken), // tokenIn
-            address(looksRareToken), // tokenOut
+            address(ScarDustToken), // tokenOut
             tradingFeeUniswapV3, // fee
             address(this), // recipient
             block.timestamp, // deadline
@@ -361,7 +361,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
         }
 
         // Take snapshot of current LOOKS balance
-        uint256 previousBalanceLOOKS = looksRareToken.balanceOf(address(this));
+        uint256 previousBalanceLOOKS = ScarDustToken.balanceOf(address(this));
 
         // Fetch total number of prime shares
         (uint256 totalNumberPrimeShares, , ) = feeSharingSystem.userInfo(address(this));
@@ -377,10 +377,10 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
         feeSharingSystem.withdraw(currentNumberPrimeShares, false);
 
         // Calculate the difference between the current balance of LOOKS with the previous snapshot
-        uint256 amountToTransfer = looksRareToken.balanceOf(address(this)) - previousBalanceLOOKS;
+        uint256 amountToTransfer = ScarDustToken.balanceOf(address(this)) - previousBalanceLOOKS;
 
         // Transfer the LOOKS amount back to user
-        looksRareToken.safeTransfer(msg.sender, amountToTransfer);
+        ScarDustToken.safeTransfer(msg.sender, amountToTransfer);
 
         emit Withdraw(msg.sender, amountToTransfer);
     }

@@ -24,7 +24,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
     // Precision factor for calculating rewards and exchange rate
     uint256 public constant PRECISION_FACTOR = 10**18;
 
-    IERC20 public immutable looksRareToken;
+    IERC20 public immutable ScarDustToken;
 
     IERC20 public immutable rewardToken;
 
@@ -57,17 +57,17 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
 
     /**
      * @notice Constructor
-     * @param _looksRareToken address of the token staked (LOOKS)
+     * @param _ScarDustToken address of the token staked (LOOKS)
      * @param _rewardToken address of the reward token
      * @param _tokenDistributor address of the token distributor contract
      */
     constructor(
-        address _looksRareToken,
+        address _ScarDustToken,
         address _rewardToken,
         address _tokenDistributor
     ) {
         rewardToken = IERC20(_rewardToken);
-        looksRareToken = IERC20(_looksRareToken);
+        ScarDustToken = IERC20(_ScarDustToken);
         tokenDistributor = TokenDistributor(_tokenDistributor);
     }
 
@@ -90,7 +90,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         (uint256 totalAmountStaked, ) = tokenDistributor.userInfo(address(this));
 
         // Transfer LOOKS tokens to this address
-        looksRareToken.safeTransferFrom(msg.sender, address(this), amount);
+        ScarDustToken.safeTransferFrom(msg.sender, address(this), amount);
 
         uint256 currentShares;
 
@@ -254,8 +254,8 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
      * @param _to token to transfer
      */
     function _checkAndAdjustLOOKSTokenAllowanceIfRequired(uint256 _amount, address _to) internal {
-        if (looksRareToken.allowance(address(this), _to) < _amount) {
-            looksRareToken.approve(_to, type(uint256).max);
+        if (ScarDustToken.allowance(address(this), _to) < _amount) {
+            ScarDustToken.approve(_to, type(uint256).max);
         }
     }
 
@@ -329,7 +329,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         }
 
         // Transfer LOOKS tokens to sender
-        looksRareToken.safeTransfer(msg.sender, currentAmount);
+        ScarDustToken.safeTransfer(msg.sender, currentAmount);
 
         emit Withdraw(msg.sender, currentAmount, pendingRewards);
     }

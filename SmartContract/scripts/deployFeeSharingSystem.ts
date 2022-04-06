@@ -14,13 +14,13 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const _looksRareToken = "0x3fE0fa80e5243Bc34773A633F1164466652884A5";
+  const _scarDustToken = "0x3fE0fa80e5243Bc34773A633F1164466652884A5";
   const _rewardToken = "0xc778417e063141139fce010982780140aa0cd5ab"; // Rinkeby WETH Testnet Address
   const _tokenDistributor = "0xc48d384aa1D768c80a4d573a7122230e1faae007";
 
   const FeeSharingSystem = await ethers.getContractFactory("FeeSharingSystem");
   const feeSharingSystem = await FeeSharingSystem.deploy(
-    _looksRareToken,
+    _scarDustToken,
     _rewardToken,
     _tokenDistributor
   );
