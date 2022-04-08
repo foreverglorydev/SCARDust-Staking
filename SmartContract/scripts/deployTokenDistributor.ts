@@ -14,12 +14,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const _scarDustToken = "0x4FCb12e1Ba93d1c77Bdc872212CaAf53e2e739E7";
-  const _tokenSplitter = "0x1bc13e4Cb03b3A9CedE8F11C73F30dd3e4b6e79A";
+  const _scarDustToken = "0xff29117e680d6977f487d647356d376654B0F0CE";
+  const _tokenSplitter = "0x67cE3a7cBC96EfeAf8041Cfd1F0e382722fc91e4";
   const _startBlock = "10429000"; // Testnet BlockNumer
   const _rewardsPerBlockForStaking = ["189000000000000000000","89775000000000000000","35437500000000000000","18900000000000000000"]
-  const _rewardsPerBlockForOthers = ["611000000000000000000", "290225000000000000000", "114562500000000000000", "61100000000000000000"];
-  const _periodLengthesInBlocks = ["195000", "585000", "1560000", "2346250"];
+  const _rewardsPerBlockForOthers = ["611000000000000000000", "290225000000000000000", "114562500000000000000", "61100000000000000000"]
+  const _periodLengthesInBlocks = ["195000", "585000", "1560000", "2346250"]
   const _numberPeriods = "4";
 
   const TokenDistributor = await ethers.getContractFactory("TokenDistributor");

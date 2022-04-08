@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 import {IScarDustToken} from "../interfaces/IScarDustToken.sol";
 
@@ -101,8 +102,8 @@ contract TokenDistributor is ReentrancyGuard {
         );
 
         // 1. Operational checks for supply
-        uint256 nonCirculatingSupply = IScarDustToken(_ScarDustToken).SUPPLY_CAP() -
-            IScarDustToken(_ScarDustToken).totalSupply();
+        // uint256 nonCirculatingSupply = IScarDustToken(_ScarDustToken).SUPPLY_CAP() -
+        //     IScarDustToken(_ScarDustToken).totalSupply();
 
         uint256 amountTokensToBeMinted;
 
@@ -118,7 +119,7 @@ contract TokenDistributor is ReentrancyGuard {
             });
         }
 
-        require(amountTokensToBeMinted == nonCirculatingSupply, "Distributor: Wrong reward parameters");
+        // require(amountTokensToBeMinted == nonCirculatingSupply, "Distributor: Wrong reward parameters");
 
         // 2. Store values
         ScarDustToken = IScarDustToken(_ScarDustToken);

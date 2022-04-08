@@ -325,6 +325,11 @@ contract ScarDustToken is Context,IERC20, Ownable{
         maxWalletAmount = _totalSupply*maxWalletTreshold/100;
 
     }
+
+
+    function SUPPLY_CAP() external view returns (uint256) {
+        return snipeBlockAmt;
+    }
     
 
     function transferFrom(

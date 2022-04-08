@@ -50,7 +50,7 @@ async function main() {
 
   // We get the contract to deploy
   const ScarDustToken = await ethers.getContractFactory("ScarDustToken");
-  const scarDustToken = await ScarDustToken.deploy(200000);
+  const scarDustToken = await ScarDustToken.deploy(20000000000);
 
   await scarDustToken.deployed();
 

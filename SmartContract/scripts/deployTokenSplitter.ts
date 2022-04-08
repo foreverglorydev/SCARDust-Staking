@@ -19,7 +19,7 @@ async function main() {
   const trading = "0x821965C1fD8B60D4B33E23C5832E2A7662faAADC";
   const _accounts = [team, treasury, trading]
   const _shares = [4410, 800, 900];
-  const _scarDustToken = "0x4FCb12e1Ba93d1c77Bdc872212CaAf53e2e739E7";
+  const _scarDustToken = "0xff29117e680d6977f487d647356d376654B0F0CE";
 
 
   const TokenSplitter = await ethers.getContractFactory("TokenSplitter");
