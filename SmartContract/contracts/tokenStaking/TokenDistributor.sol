@@ -32,7 +32,6 @@ contract TokenDistributor is ReentrancyGuard {
 
     IScarDustToken public immutable ScarDustToken;
 
-    address public immutable tokenSplitter;
 
     // Number of reward periods
     uint256 public immutable NUMBER_PERIODS;
@@ -78,7 +77,6 @@ contract TokenDistributor is ReentrancyGuard {
     /**
      * @notice Constructor
      * @param _ScarDustToken DUST token address
-     * @param _tokenSplitter token splitter contract address (for team and trading rewards)
      * @param _startBlock start block for reward program
      * @param _rewardsPerBlockForStaking array of rewards per block for staking
      * @param _rewardsPerBlockForOthers array of rewards per block for other purposes (team + treasury + trading rewards)
@@ -87,7 +85,6 @@ contract TokenDistributor is ReentrancyGuard {
      */
     constructor(
         address _ScarDustToken,
-        address _tokenSplitter,
         uint256 _startBlock,
         uint256[] memory _rewardsPerBlockForStaking,
         uint256[] memory _rewardsPerBlockForOthers,
@@ -123,7 +120,6 @@ contract TokenDistributor is ReentrancyGuard {
 
         // 2. Store values
         ScarDustToken = IScarDustToken(_ScarDustToken);
-        tokenSplitter = _tokenSplitter;
         rewardPerBlockForStaking = _rewardsPerBlockForStaking[0];
         rewardPerBlockForOthers = _rewardsPerBlockForOthers[0];
 
@@ -358,7 +354,6 @@ contract TokenDistributor is ReentrancyGuard {
                 accTokenPerShare = accTokenPerShare + ((tokenRewardForStaking * PRECISION_FACTOR) / totalAmountStaked);
             }
 
-            ScarDustToken.mint(tokenSplitter, tokenRewardForOthers);
         }
 
         // Update last reward block only if it wasn't updated after or at the end block

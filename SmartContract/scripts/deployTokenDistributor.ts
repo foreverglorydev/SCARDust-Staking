@@ -25,7 +25,6 @@ async function main() {
   const TokenDistributor = await ethers.getContractFactory("TokenDistributor");
   const tokenDistributor = await TokenDistributor.deploy(
     _scarDustToken,
-    _tokenSplitter,
     _startBlock,
     _rewardsPerBlockForStaking,
     _rewardsPerBlockForOthers,

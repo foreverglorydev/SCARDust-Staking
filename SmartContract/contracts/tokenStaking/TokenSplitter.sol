@@ -111,8 +111,7 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
         }
 
         uint256 totalTokensReceived = ScarDustToken.balanceOf(address(this)) + totalTokensDistributed;
-        uint256 pendingRewards = ((totalTokensReceived * accountInfo[account].shares) / TOTAL_SHARES) -
-            accountInfo[account].tokensDistributedToAccount;
+        uint256 pendingRewards = totalTokensReceived;
 
         return pendingRewards;
     }
