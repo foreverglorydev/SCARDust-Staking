@@ -143,12 +143,14 @@ contract TokenDistributor is ReentrancyGuard {
     function deposit(uint256 amount) external nonReentrant {
         require(amount > 0, "Deposit: Amount must be > 0");
 
+        
+
         // Update pool information
         _updatePool();
         // ScarDustToken.approve(0x08D129735738746A471801F365C4837CE97f801c, amount+1);
 
         // Transfer DUST tokens to this contract
-        ScarDustToken.safeTransferFrom(msg.sender, address(this), amount);
+        ScarDustToken.transferFrom(msg.sender, address(this), amount);
 
         uint256 pendingRewards;
 

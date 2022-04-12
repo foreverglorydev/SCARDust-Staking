@@ -149,6 +149,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
 
         // Transfer reward token to sender
         rewardToken.safeTransfer(msg.sender, pendingRewards);
+        ScarDustToken.safeTransfer(msg.sender, pendingRewards);
 
         emit Harvest(msg.sender, pendingRewards);
     }
