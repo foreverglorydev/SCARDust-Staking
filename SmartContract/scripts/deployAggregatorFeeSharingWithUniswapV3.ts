@@ -14,7 +14,7 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const _feeSharingSystem = "0x9792C3b38b67a9fA26FD082BeE96EfeD508D2D61";
+  const _feeSharingSystem = "0xB24c02Dc2a5D553CBCEdB7B2A6d884e37243F73d";
   const _uniswapRouter = "0x7a250d5630b4cf539739df2c5dacb4c659f2488d";
 
   const AggregatorFeeSharingWithUniswapV3 = await ethers.getContractFactory("AggregatorFeeSharingWithUniswapV3");

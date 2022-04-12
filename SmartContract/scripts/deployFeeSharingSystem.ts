@@ -14,9 +14,9 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const _scarDustToken = "0xff29117e680d6977f487d647356d376654B0F0CE";
+  const _scarDustToken = "0x08D129735738746A471801F365C4837CE97f801c";
   const _rewardToken = "0x0a180a76e4466bf68a7f86fb029bed3cccfaaac5"; // Ropsten WETH Testnet Address
-  const _tokenDistributor = "0xdc187779eB7dA87423f4586156162Aa87B6b5762";
+  const _tokenDistributor = "0x60f31CA91319d1d03710aF52eC5461422ce80EDF";
 
   const FeeSharingSystem = await ethers.getContractFactory("FeeSharingSystem");
   const feeSharingSystem = await FeeSharingSystem.deploy(
