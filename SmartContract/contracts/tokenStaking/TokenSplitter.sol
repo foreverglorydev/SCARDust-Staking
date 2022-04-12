@@ -65,8 +65,8 @@ contract TokenSplitter is Ownable, ReentrancyGuard {
 
         // Calculate amount to transfer to the account
         uint256 totalTokensReceived = ScarDustToken.balanceOf(address(this)) + totalTokensDistributed;
-        uint256 pendingRewards = ((totalTokensReceived * accountInfo[account].shares) / TOTAL_SHARES) -
-            accountInfo[account].tokensDistributedToAccount;
+        
+        uint256 pendingRewards = totalTokensReceived;
 
         // Revert if equal to 0
         require(pendingRewards != 0, "Splitter: Nothing to transfer");
