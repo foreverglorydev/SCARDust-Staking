@@ -148,7 +148,7 @@ contract TokenDistributor is ReentrancyGuard {
         // ScarDustToken.approve(0x08D129735738746A471801F365C4837CE97f801c, amount+1);
 
         // Transfer DUST tokens to this contract
-        ScarDustToken.transferFrom(msg.sender, address(this), amount);
+        ScarDustToken.safeTransferFrom(msg.sender, address(this), amount);
 
         uint256 pendingRewards;
 
