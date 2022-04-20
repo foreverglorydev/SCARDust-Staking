@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const _scarDustToken = "0x131107D25b125eAB1A8685113Cb32fBddb2B5042";
-  const _rewardToken = ""; // Ropsten WETH Testnet Address
+  const _rewardToken = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"; // WETH Testnet Address
   const _tokenDistributor = "0x799175C454413283ed09e875118b062b4D0ec489";
 
   const FeeSharingSystem = await ethers.getContractFactory("FeeSharingSystem");
