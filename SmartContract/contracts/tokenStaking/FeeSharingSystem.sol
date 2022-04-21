@@ -19,6 +19,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         uint256 shares; // shares of token staked
         uint256 userRewardPerTokenPaid; // user reward per token paid
         uint256 rewards; // pending rewards
+        uint256 rewardsWETH;  //pending rewards with WETH
     }
 
     // Precision factor for calculating rewards and exchange rate
@@ -140,7 +141,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
 
         // Retrieve pending rewards
         uint256 pendingRewards = userInfo[msg.sender].rewards;
-
+        uint256 pendingRewardsWETH = userInfo[msg.sender].rewardsWETH;
         // If pending rewards are null, revert
         require(pendingRewards > 0, "Harvest: Pending rewards must be > 0");
 
@@ -149,7 +150,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
 
         // Transfer reward token to sender
         rewardToken.safeTransfer(msg.sender, pendingRewards);
-        ScarDustToken.safeTransfer(msg.sender, pendingRewards);
+        ScarDustToken.safeTransfer(msg.sender, pendingRewardsWETH);
 
         emit Harvest(msg.sender, pendingRewards);
     }
@@ -249,6 +250,12 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
                 PRECISION_FACTOR) + userInfo[user].rewards;
     }
 
+    function _calculatePendingRewardsWETH(address user) internal view returns (uint256) {
+        return
+            ((userInfo[user].shares * (_rewardPerTokenWETH() - (userInfo[user].userRewardPerTokenPaid))) /
+                PRECISION_FACTOR) + userInfo[user].rewardsWETH;
+    }
+
     /**
      * @notice Check current allowance and adjust if necessary
      * @param _amount amount to transfer
@@ -281,6 +288,20 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
             totalShares;
     }
 
+    function _rewardPerTokenWETH() internal view returns (uint256) {
+
+        uint256 totalsupply = ScarDustToken.totalSupply();
+        
+        if (totalsupply == 0) {
+            return rewardPerTokenStored;
+        }
+
+        return
+            rewardPerTokenStored +
+            ((_lastRewardBlock() - lastUpdateBlock) * (currentRewardPerBlock * PRECISION_FACTOR)) /
+            totalsupply;
+    }
+
     /**
      * @notice Update reward for a user account
      * @param _user address of the user
@@ -292,6 +313,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         }
 
         userInfo[_user].rewards = _calculatePendingRewards(_user);
+        userInfo[_user].rewardsWETH = _calculatePendingRewards(_user);
         userInfo[_user].userRewardPerTokenPaid = rewardPerTokenStored;
     }
 

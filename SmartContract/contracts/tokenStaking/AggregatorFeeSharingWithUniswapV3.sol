@@ -279,7 +279,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
      * Share price is expressed times 1e18
      */
     function calculateSharePriceInPrimeShare() external view returns (uint256) {
-        (uint256 totalNumberPrimeShares, , ) = feeSharingSystem.userInfo(address(this));
+        (uint256 totalNumberPrimeShares, , , ) = feeSharingSystem.userInfo(address(this));
 
         return
             totalShares == 0 ? MINIMUM_DEPOSIT_LOOKS : (totalNumberPrimeShares * MINIMUM_DEPOSIT_LOOKS) / totalShares;
@@ -364,7 +364,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
         uint256 previousBalanceLOOKS = ScarDustToken.balanceOf(address(this));
 
         // Fetch total number of prime shares
-        (uint256 totalNumberPrimeShares, , ) = feeSharingSystem.userInfo(address(this));
+        (uint256 totalNumberPrimeShares, , , ) = feeSharingSystem.userInfo(address(this));
 
         // Calculate number of prime shares to redeem based on existing shares (from this contract)
         uint256 currentNumberPrimeShares = (totalNumberPrimeShares * _shares) / totalShares;
