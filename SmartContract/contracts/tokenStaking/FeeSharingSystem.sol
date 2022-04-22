@@ -108,15 +108,15 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         userInfo[msg.sender].shares += currentShares;
         totalShares += currentShares;
 
-        uint256 pendingRewards;
+        uint256 scarRewards;
 
         if (claimRewardToken) {
             // Fetch pending rewards
-            pendingRewards = userInfo[msg.sender].rewards;
+            scarRewards = userInfo[msg.sender].rewards;
 
-            if (pendingRewards > 0) {
+            if (scarRewards > 0) {
                 userInfo[msg.sender].rewards = 0;
-                rewardToken.safeTransfer(msg.sender, pendingRewards);
+                rewardToken.safeTransfer(msg.sender, scarRewards);
             }
         }
 
@@ -126,7 +126,7 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         // Deposit user amount in the token distributor contract
         tokenDistributor.deposit(amount);
 
-        emit Deposit(msg.sender, amount, pendingRewards);
+        emit Deposit(msg.sender, amount, scarRewards);
     }
 
     /**
@@ -140,19 +140,19 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         _updateReward(msg.sender);
 
         // Retrieve pending rewards
-        uint256 pendingRewards = userInfo[msg.sender].rewards;
-        uint256 pendingRewardsWETH = userInfo[msg.sender].rewardsWETH;
+        uint256 scarRewards = userInfo[msg.sender].rewards;
+        uint256 wethRewards = userInfo[msg.sender].rewardsWETH;
         // If pending rewards are null, revert
-        require(pendingRewards > 0, "Harvest: Pending rewards must be > 0");
+        require(scarRewards > 0, "Harvest: Pending rewards must be > 0");
 
         // Adjust user rewards and transfer
         userInfo[msg.sender].rewards = 0;
 
         // Transfer reward token to sender
-        rewardToken.safeTransfer(msg.sender, pendingRewards);
-        ScarDustToken.safeTransfer(msg.sender, pendingRewardsWETH);
+        rewardToken.safeTransfer(msg.sender, scarRewards);
+        ScarDustToken.safeTransfer(msg.sender, wethRewards);
 
-        emit Harvest(msg.sender, pendingRewards);
+        emit Harvest(msg.sender, scarRewards);
     }
 
     /**
@@ -339,21 +339,21 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         // Withdraw amount equivalent in shares
         tokenDistributor.withdraw(currentAmount);
 
-        uint256 pendingRewards;
+        uint256 scarRewards;
 
         if (claimRewardToken) {
             // Fetch pending rewards
-            pendingRewards = userInfo[msg.sender].rewards;
+            scarRewards = userInfo[msg.sender].rewards;
 
-            if (pendingRewards > 0) {
+            if (scarRewards > 0) {
                 userInfo[msg.sender].rewards = 0;
-                rewardToken.safeTransfer(msg.sender, pendingRewards);
+                rewardToken.safeTransfer(msg.sender, scarRewards);
             }
         }
 
         // Transfer LOOKS tokens to sender
         ScarDustToken.safeTransfer(msg.sender, currentAmount);
 
-        emit Withdraw(msg.sender, currentAmount, pendingRewards);
+        emit Withdraw(msg.sender, currentAmount, scarRewards);
     }
 }
